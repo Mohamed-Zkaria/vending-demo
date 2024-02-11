@@ -22,7 +22,7 @@ UserController.getUser = async (req, res) => {
         if(user){
             return res.status(200).send({user});   
         } else {
-            return res.status(404).send({msg: "Not found"})
+            return res.status(404).send({msg: "User not found"})
         }
     } catch (error) {
         console.log(error)
@@ -37,7 +37,7 @@ UserController.updateUser = async (req, res) => {
         userId = new mongoose.Types.ObjectId(userId);
         let user = await UserModel.findById(userId);
         if (!user) {
-            return res.status(404).json({ msg: 'Not found' });
+            return res.status(404).json({ msg: 'User not found' });
         }
 
         if (updated_user.username){
@@ -69,7 +69,6 @@ UserController.updateUser = async (req, res) => {
 }
 
 UserController.deleteUser = async (req, res) => {
-    console.log("delete........")
     let userId = req.params.userId;
     try {
         userId = new mongoose.Types.ObjectId(userId);

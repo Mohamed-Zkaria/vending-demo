@@ -7,7 +7,7 @@ DBConnection();
 const app = express();
 const port = process.env.PORT || 3000;
 
-const { UserRouter } = require("./routes");
+const { UserRouter, ProductRouter } = require("./routes");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,6 +20,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/user", UserRouter);
+app.use("/product", ProductRouter);
 
 app.use((req, res, next) => {
     res.status(404).json({ message: 'Not Found' });
