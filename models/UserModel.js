@@ -16,6 +16,7 @@ const UserSchema = Schema({
     },
     deposit: {
         type: Number,
+        enum: [0, 5, 10, 20, 50, 100],
         default: 0
     },
     role: {

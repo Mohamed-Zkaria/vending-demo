@@ -7,7 +7,8 @@ DBConnection();
 const app = express();
 const port = process.env.PORT || 3000;
 
-const { UserRouter, ProductRouter } = require("./routes");
+const { UserRouter, ProductRouter, PurchasementRouter } = require("./routes");
+const PurchasementMiddleWare = require("./middlewares/purchasementMiddleWare");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 
 app.use("/user", UserRouter);
 app.use("/product", ProductRouter);
+app.use("", PurchasementMiddleWare.is_buyer, PurchasementRouter);
 
 app.use((req, res, next) => {
     res.status(404).json({ message: 'Not Found' });

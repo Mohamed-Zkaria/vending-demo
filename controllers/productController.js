@@ -11,6 +11,9 @@ ProductController.createProduct = async (req, res) => {
         let user = await UserModel.findById(userId);
         
         const product = new ProductModel(product_data);
+        if(!product.amountAvailable < 0){
+            return res.status(422).send({msg: "Quantity can't be negative."});
+        }
         product.sellerId = user._id;
         await product.save();
         
@@ -56,6 +59,10 @@ ProductController.updateProduct = async (req, res) => {
             product.cost = updated_product.cost;
         }
 
+        if(updated_product.amountAvailable < 0){
+            return res.status(422).send({msg: "Quantity can't be negative."});
+        }
+
         if(updated_product.amountAvailable){
             product.amountAvailable = updated_product.amountAvailable;
         }
@@ -74,7 +81,13 @@ ProductController.delteProduct = async (req, res) => {
         productId = new mongoose.Types.ObjectId(productId);
         const product = await ProductModel.findById(productId);
         if (product) {
+            let user = await UserModel.findById(product.sellerId);
+            let newProducts = user.products.filter(id => id.toString() !== product._id.toString());
+            user.products = newProducts;
+            await user.save();
             await product.deleteOne();
+
+
             return res.status(200).send({ message: 'Product Deleted successfully' });
         } else {
             return res.status(404).send({ msg: "Product not found" })
